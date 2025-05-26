@@ -1,0 +1,95 @@
+/*
+                <div class="section__cards-meal">
+                    <div class="section__cards-meal--thumb">
+                        <img src="https:\/\/www.themealdb.com\/images\/media\/meals\/tvvxpv1511191952.jpg" />
+                    </div>
+                    <div class="section__cards-meal--name .section__cards-meal--thumb">
+                        <p>Broccoli & Stilton soup</p>
+                    </div>
+                    <div class="section__cards-meal--classification section__cards-meal--data">
+                        <p>
+                            <span class="section__cards-meal--category">
+                                Starter
+                            </span>
+                            <span class="section__cards-meal--type">
+                                British
+                            </span>
+                        </p>
+                    </div>
+                    <button class="section__cards-meal--more-btn">+</button>
+                </div>
+*/
+
+.section__cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75vw;
+    margin: 0.75vw;
+}
+
+.section__cards-meal, .section__cards-meal--thumb, .section__cards-meal--thumb img {
+    width: 16vw;
+}
+
+.section__cards-meal {
+    justify-self: center;
+    align-self: center;
+    border: 0.1vw solid rgba(0, 0, 0, .1);
+    border-radius: 1vw;
+    overflow: hidden;
+}
+
+.section__cards-meal--thumb {
+    height: 12vw;
+    overflow: hidden;
+}
+
+.section__cards-meal--thumb img {
+    object-fit: cover;
+    user-select: none;
+}
+
+.section__cards-meal--data {
+    display: flex;
+    align-items: center;
+    padding: 0 1vw;
+    border-bottom: 0.1vw solid rgba(0, 0, 0, .1);
+    color: rgba(0, 0, 0, .5);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 0.7vw;
+}
+
+.section__cards-meal--name {
+    justify-content: center;
+    font-size: 1vw;
+}
+
+.section__cards-meal--name p {
+    margin: 0.5vw;
+}
+
+.section__cards-meal--classification p {
+    margin: 0.3vw;
+}
+
+.section__cards-meal--classification p {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.section__cards-meal--type {
+    color: rgba(0, 0, 0, .25);
+}
+
+.section__cards-meal--more-btn {
+    margin: 0;
+    padding: 0.3vw;
+    width: 100%;
+    border: none;
+    color: rgba(0, 0, 0, .5);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 0.9vw;
+    user-select: none;
+    cursor: pointer;
+}
