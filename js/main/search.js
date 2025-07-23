@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function DISPLAY_SEARCH(data) {
+        section_cards.style.gridTemplateColumns = 'repeat(5, 1fr)';
         section_cards.innerHTML = '';
         for (let i = 0; i < data.length; i++) {
             FETCH_DISH_DETAILS(data[i].idMeal)
@@ -37,10 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     section_cards.insertAdjacentHTML('beforeend', `
                         <div class="section__cards-meal">
                             <div class="section__cards-meal--thumb">
-                                <img src="${data[i].strMealThumb}" />
+                                <img src="${details.strMealThumb}" />
                             </div>
                             <div class="section__cards-meal--name section__cards-meal--data">
-                                <p>${data[i].strMeal}</p>
+                                <p>${details.strMeal}</p>
                             </div>
                             <div class="section__cards-meal--classification section__cards-meal--data">
                                 <p>
@@ -52,11 +53,61 @@ document.addEventListener('DOMContentLoaded', () => {
                                     </span>
                                 </p>
                             </div>
-                            <button class="section__cards-meal--more-btn">+</button>
+                            <button class="section__cards-meal--more-btn" dish-id="${details.idMeal}">+</button>
                         </div>
                     `);
+                    document.querySelectorAll('.section__cards-meal--more-btn').forEach(btn => {
+                        btn.addEventListener('click', DISPLAY_DISH_DETAILS);
+                    });
                 });
         };
+    };
+
+    function DISPLAY_DISH_DETAILS(event) {
+        const id = event.target.getAttribute('dish-id');
+        section_cards.style.gridTemplateColumns = '1fr';
+        section_cards.innerHTML = '';
+        FETCH_DISH_DETAILS(id)
+            .then(data => {
+                section_cards.innerHTML = `
+                        <p class="section__cards--title">${data.strMeal}</p>
+                        <img class="section__cards--img" src="${data.strMealThumb}" />
+                        <p class="section__cards--classification">#${data.strCategory.toLowerCase()} #${data.strArea.toLowerCase()}food</p>
+                        <p class="section__cards--ingredients-title">Ingredients:</p>
+                        <ul class="section__cards--ingredients-list"></ul>
+                        <p class="section__cards--instructions-title">Instructions:</p>
+                        <p class="section__cards--instructions-description">${data.strInstructions}</p>
+                    `;
+                const section_cards_ingredients_list = document.querySelector('.section__cards--ingredients-list');
+                for (let i = 0; i < 20; i++) {
+                    const ingredient_key = `strIngredient${i + 1}`;
+                    const measure_key = `strMeasure${i + 1}`;
+                    const regex = /^[0-9\s]*$/;
+                    if (data[ingredient_key] === '') {
+                        break;
+                    };
+                    if (regex.test(data[measure_key].trim())) {
+                        if (data[measure_key] === '1') {
+                            section_cards_ingredients_list.insertAdjacentHTML('beforeend', `
+                                <li>${data[ingredient_key].trim()} (${data[measure_key].trim()} unit)</li>
+                            `);
+                        } else {
+                            section_cards_ingredients_list.insertAdjacentHTML('beforeend', `
+                                <li>${data[ingredient_key].trim()} (${data[measure_key].trim()} units)</li>
+                            `);
+                        };
+                    } else {
+                        section_cards_ingredients_list.insertAdjacentHTML('beforeend', `
+                            <li>${data[ingredient_key].trim()} (${data[measure_key].trim()})</li>
+                        `);
+                    };
+                };
+                if (data.strYoutube !== '') {
+                    section_cards.insertAdjacentHTML('beforeend', `
+                        <iframe class="section__cards--instructions-video" width="560" height="315" src="${data.strYoutube.replace('watch?v=', 'embed/')}?si=1LkmKWMyEXQ4s5Oz" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    `);
+                };
+            });
     };
 
     nav_form_search_bar.addEventListener('input', () => {
@@ -94,17 +145,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const form_data = Object.fromEntries(
             new FormData(e.target)
         );
-        if (form_data.name !== undefined) {
+        if (form_data.name !== undefined && form_data.name !== '') {
             FETCH_BY_NAME(form_data)
                 .then(data => {
                     DISPLAY_SEARCH(data);
                 });
-        } else if (form_data.category !== undefined) {
+        } else if (form_data.category !== undefined && form_data.category !== '') {
             FETCH_BY_CATEGORY(form_data)
                 .then(data => {
                     DISPLAY_SEARCH(data);
                 });
-        } else if (form_data.type !== undefined) {
+        } else if (form_data.type !== undefined && form_data.type !== '') {
             FETCH_BY_TYPE(form_data)
                 .then(data => {
                     DISPLAY_SEARCH(data);

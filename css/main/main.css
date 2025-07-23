@@ -26,7 +26,8 @@ select, button {
 }
 
 .nav__brand {
-    width: 1vw;
+    width: 1.5vmax;
+    cursor: pointer;
 }
 
 .section__title {
